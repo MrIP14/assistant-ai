@@ -63,13 +63,21 @@ export const controlTools: FunctionDeclaration[] = [
 ];
 
 export class GeminiService {
-  private ai: GoogleGenAI;
+  private ai: GoogleGenAI | null = null;
 
   constructor() {
-    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+    // Vercel-এ process.env.API_KEY না থাকলে যাতে ক্রাশ না করে
+    const apiKey = typeof process !== 'undefined' ? process.env.API_KEY : '';
+    if (apiKey) {
+      this.ai = new GoogleGenAI({ apiKey });
+    }
   }
 
   async askAssistant(prompt: string): Promise<any> {
+    if (!this.ai) {
+      return { text: "দুঃখিত স্যার, আমার সিস্টেমে এপিআই কী (API Key) সেট করা নেই। দয়া করে এনভায়রনমেন্ট ভেরিয়েবল চেক করুন।" };
+    }
+
     try {
       const response = await this.ai.models.generateContent({
         model: 'gemini-3-pro-preview',
