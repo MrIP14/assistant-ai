@@ -1,0 +1,9 @@
+{
+  "name": "Bangla Assistant AI",
+  "description": "A futuristic voice-activated assistant that can control device features and answer any questions.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
